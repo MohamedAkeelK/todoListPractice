@@ -1,11 +1,13 @@
 //select the form and list items(ul)
 const addform = document.getElementById('addForm');
 const listOfItems = document.getElementById('listOfItems');
+const filter = document.getElementById('filter');
 
 //event listeners
 addform.addEventListener('submit', addTodo);
 listOfItems.addEventListener('click', deleteTodo);
 listOfItems.addEventListener('click', checkTodo);
+filter.addEventListener('keyup', filterTodo);
 
 //add todo function
 function addTodo(e) {
@@ -24,8 +26,16 @@ function addTodo(e) {
     //set the text content and classname
     deleteBtn.textContent = "X";
     deleteBtn.className = "delete-btn";
+    
+    //create check button
+    const completeBtn = document.createElement('button');
+    completeBtn.textContent = "Completed";
+    completeBtn.className = "check";
+
     //append button to newListItem
+    newListItem.appendChild(completeBtn)
     newListItem.appendChild(deleteBtn);
+
     //append new list item to ul , the listOfItems
     listOfItems.appendChild(newListItem);
 }
@@ -47,5 +57,25 @@ function checkTodo(e) {
     if(e.target.classList.contains('check')) {
         let li = e.target.parentElement;
         li.style.textDecorationLine = "line-through";
+        li.style.color = "green";
     }
 }
+
+//filter Todos function
+function filterTodo(e) {
+    let userInput = e.target.value.toLowerCase();
+    let items = listOfItems.getElementsByTagName('li');
+
+    Array.from(items).forEach(function(item) {
+
+        let listItem = item.firstChild.textContent;
+
+       if(listItem.toLowerCase().indexOf(userInput) != -1) {
+           item.style.display = "block";
+       } else {
+           item.style.display = "none";
+       }
+    });
+}
+
+
